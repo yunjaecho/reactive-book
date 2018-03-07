@@ -7,11 +7,18 @@ import rx.Subscriber;
 import rx.Subscription;
 
 import java.math.BigInteger;
+import java.util.Collection;
+import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.IntStream;
 
 import static java.math.BigInteger.ONE;
 import static java.math.BigInteger.ZERO;
 import static java.util.concurrent.TimeUnit.SECONDS;
+import static java.util.stream.Collectors.toList;
 
 public class Chapter2 {
 
@@ -204,5 +211,31 @@ public class Chapter2 {
     @Test
     public void sample_44() {
         delayed(new Tweet("new Tweet")).subscribe(s -> System.out.println(s.getText()));
+    }
+
+    static Observable<Data> loadAll(Collection<Integer> ids) {
+        return Observable.create(s -> {
+            ExecutorService pools = Executors.newFixedThreadPool(10);
+            AtomicInteger countDown = new AtomicInteger(ids.size());
+            ids.forEach(id -> pools.submit(()-> {
+                final Data data = load(id);
+                s.onNext(data);
+                if (countDown.decrementAndGet() == 0) {
+                    pools.shutdownNow();
+                    s.onCompleted();
+                }
+            }));
+        });
+    }
+
+    private static Data load(Integer id) {
+        return new Data();
+    }
+
+    @Test
+    public void sample_46() {
+        List<Integer> list = IntStream.range(1, 1000).boxed().collect(toList());
+        loadAll(list).subscribe(System.out::println);
+
     }
 }

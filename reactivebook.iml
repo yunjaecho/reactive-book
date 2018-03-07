@@ -17,5 +17,7 @@
     <orderEntry type="library" scope="TEST" name="Maven: ch.qos.logback:logback-classic:1.1.7" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: ch.qos.logback:logback-core:1.1.7" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.slf4j:slf4j-api:1.7.21" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: org.twitter4j:twitter4j-stream:4.0.5" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: org.twitter4j:twitter4j-core:4.0.5" level="project" />
   </component>
 </module>
